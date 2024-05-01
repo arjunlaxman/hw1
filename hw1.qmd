@@ -1,27 +1,36 @@
----
-title: "Homework 1"
-author: "[Insert your name here]{style='background-color: yellow;'}"
+
+  title: "Homework 1"
+author: "ArjunLaxman{style='background-color: yellow;'}"
 toc: true
 title-block-banner: true
 title-block-style: default
-format: html
+format: pdf
 #format: pdf
+
+  
+  [Link to the Github repository](https://github.com/STAT380/hw1.git)
+
 ---
-
-[Link to the Github repository](https://github.com/STAT380/hw1.git)
-
----
-
-::: {.callout-important}
+  
+  ::: {.callout-important}
 ## Due: Fri, Jan 26, 2024 @ 11:59pm
 
+```{R}
+install.packages("magrittr", repos = "https://cran.r-project.org")
+
+
+```
+```{R}
+library(magrittr)
+
+```
 
 
 Please read the instructions carefully before submitting your assignment. 
 
 1. This assignment requires you to:
-    - Upload your Quarto markdown files to a `git` repository
-    - Upload a `PDF` file on Canvas
+  - Upload your Quarto markdown files to a `git` repository
+- Upload a `PDF` file on Canvas
 
 1. Don't collapse any code cells before submitting. 
 
@@ -51,7 +60,7 @@ In this question, we will walk through the process of _forking_ a `git` reposito
 2. Clone your Github repository on your local machine
 
     ```bash
-    $ git clone <<insert your repository url here>>
+    $ git clone <<https://github.com/arjunlaxman/hw1>>
     $ cd hw-1
     ```
 
@@ -69,10 +78,10 @@ In this question, we will walk through the process of _forking_ a `git` reposito
 5. When you're done working on your assignment, push the changes to your github repository.
 
 6. Navigate to the original Github repository [here](https://github.com/STAT380/hw1.git) and submit a pull request linking to your repository. 
-    
-    Remember to **include your name** in the pull request information!
 
-If you're stuck at any step along the way, you can refer to the [official Github docs here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+Remember to **include your name** in the pull request information!
+  
+  If you're stuck at any step along the way, you can refer to the [official Github docs here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
 
 
 <br><br><br><br>
@@ -99,6 +108,9 @@ my_vec <- c(
     "+1.76",
     "-0.36"
 )
+
+
+
 ```
 
 
@@ -106,15 +118,50 @@ For the following questions, provide your answers in a code cell.
 
 1. What data type does the vector contain?
 
+```{R}
+
+data_type <- typeof(my_vec)
+
+```
+
+
 1. Create two new vectors called `my_vec_double` and `my_vec_int` which converts `my_vec` to Double & Integer types, respectively, 
+
+```{R}
+my_vec_double <- as.numeric(my_vec)  # Converts character to double
+my_vec_int <- as.integer(my_vec_double)  # Converts double to int
+```
+
+
 
 1. Create a new vector `my_vec_bool` which comprises of:
     * ```r TRUE```if an element in `my_vec_double` is $\le 0$
+
+```{R}
+my_vec_bool <- my_vec_double <= 0
+# TRUE if an element is <= 0
+# FALSE if an element is > 0
+
+```
+
+    
     * ```r FALSE``` if an element in `my_vec_double` is $\ge 0$
 
+    
     How many elements of `my_vec_double` are greater than zero?
 
+```{R}
+
+count_greater_than_zero <- sum(my_vec_double > 0)
+
+```
+
+    
 1. Sort the values of `my_vec_double` in ascending order. 
+
+```{R}
+my_vec_sorted <- sort(my_vec_double)
+```
 
 
 <br><br><br><br>
@@ -144,6 +191,22 @@ $$
 
 ::: {.callout-warning}
 ## Tip
+```{R}
+# Creatig the first 3x3 matrix
+matrix_1 <- matrix(1:9, nrow=3, ncol=3, byrow=TRUE)
+
+# Prints the matrix to check
+print(matrix_1)
+
+```
+```{R}
+# Creating the second matrix with integers and their squares
+matrix_2 <- matrix(c(1:100, (1:100)^2), nrow=2, byrow=TRUE)
+
+# Print the matrix to check
+print(matrix_2)
+
+```
 
 Recall the discussion in class on how `R` fills in matrices
 :::
@@ -178,78 +241,129 @@ mean(M)
 
 2. Write a function `row_wise_scan` which scans the entries of `M` one row after another and outputs the number of elements whose value is $\ge 0$. You can use the following **starter code**
 
-```R
-row_wise_scan <- function(x){
-    n <- nrow(x)
-    m <- ncol(x)
 
-    # Insert your code here
+```{R}
+row_wise_scan <- function(x){
+    n <- nrow(x)  # Number of rows
+    m <- ncol(x)  # Number of columns
     count <- 0
-    for(...){
-        for(...){
-            if(...){
+    for(i in 1:n){
+        for(j in 1:m){
+            if(x[i, j] >= 0){
                 count <- count + 1 
             }
         }
     }
-
     return(count)
 }
+
 ```
+
 
 
 3. Similarly, write a function `col_wise_scan` which does exactly the same thing but scans the entries of `M` one column after another
 
-```R
+
+```{R}
 col_wise_scan <- function(x){
+    n <- nrow(x)
+    m <- ncol(x)
+    
     count <- 0
     
-    ... # Insert your code here
-
+    for(j in 1:m){
+        for(i in 1:n){
+            if(x[i, j] >= 0){
+                count <- count + 1
+            }
+        }
+    }
     return(count)
 }
+
+
 ```
+
+
 You can check if your code is doing what it's supposed to using the function here[^footnote]
 
 4. Between `col_wise_scan` and `row_wise_scan`, which function do you expect to take shorter to run? Why?
 
-5. Write a function `time_scan` which takes in a method `f` and a matrix `M` and outputs the amount of time taken to run `f(M)`
+  Since R stores matrices in column-major order, accessing data column-wise aligns with continuous memory locations, enhancing cache efficiency. Thus, the col_wise_scan function should perform faster than row_wise_scan due to more optimal memory access.
+  
+  5. Write a function `time_scan` which takes in a method `f` and a matrix `M` and outputs the amount of time taken to run `f(M)`
 
-```R
+```{R}
 time_scan <- function(f, M){
-    initial_time <- ... # Write your code here
-    f(M)
-    final_time <- ...  # Write your code here
+    initial_time <- Sys.time()  # to Capture start time
     
-    total_time_taken <- final_time - initial_time
+    f(M)  # Executes function f on matrix M
+    
+    final_time <- Sys.time()  # Captures the end time
+    
+    total_time_taken <- final_time - initial_time  # Calculates the duration
+    
     return(total_time_taken)
 }
+
 ```
+
 
 Provide your output to
 
-```R
-list(
-    row_wise_time = time_scan(row_wise_scan, M),
-    col_wise_time = time_scan(row_wise_scan, M)
-)
-```
-Which took longer to run? 
 
-6. Repeat this experiment now when:
-    * `M` is a $100 \times 100$ matrix
-    * `M` is a $1000 \times 1000$ matrix
-    * `M` is a $5000 \times 5000$ matrix
+```{R}
+M <- generate_matrix(50)  # Create a 50x50 matrix
+
+# Measure the time taken by each scan function
+row_wise_time <- time_scan(row_wise_scan, M)
+col_wise_time <- time_scan(col_wise_scan, M)
+
+# Output the times
+list(
+    row_wise_time = row_wise_time,
+    col_wise_time = col_wise_time
+)
+
+```
+
+
+
+Which took longer to run? 
+  
+  6. Repeat this experiment now when:
+  * `M` is a $100 \times 100$ matrix
+* `M` is a $1000 \times 1000$ matrix
+* `M` is a $5000 \times 5000$ matrix
+
+```{R}
+# List of matrix sizes
+sizes <- c(100, 1000, 5000)
+results <- list()
+
+# Loop through each size and measure performance
+for (size in sizes) {
+    M <- generate_matrix(size)  # Generates matrix
+    row_time <- time_scan(row_wise_scan, M)  # Time raken row-wise scanning
+    col_time <- time_scan(col_wise_scan, M)  # Time taken column-wise scanning
+    results[[paste(size, "x", size)]] <- list(row_time = row_time, col_time = col_time)
+}
+
+# Print results
+results
+
+```
+
 
 What can you conclude?
+  
+size of the matrix affects the performance of row-wise and column-wise scanning in R
 
-<br><br><br><br>
-<br><br><br><br>
----
-
-# Appendix
-
-Print your `R` session information using the following command
+  ---
+  
+  # Appendix
+  
+  Print your `R` session information using the following command
 
 ```{R}
 sessionInfo()
@@ -257,9 +371,13 @@ sessionInfo()
 
 [^footnote]: If your code is right, the following code should evaluate to be `TRUE`
 
-    ```R
-    sapply(1:100, function(i) {
-        x <- generate_matrix(100)
-        row_wise_scan(x) == col_wise_scan(x)
-    }) %>% sum == 100
-    ```
+```{R}
+
+sapply(1:100, function(i) {
+    x <- generate_matrix(100)
+    row_wise_scan(x) == col_wise_scan(x)
+}) %>% sum == 100
+
+
+```
+
